@@ -1,0 +1,32 @@
+
+.home-container {
+    border: 2px solid rgb(41, 41, 41);
+    border-radius: 5px;
+    box-shadow: 3px  rgb(190, 186, 186);;
+}
+.shopping-cart {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.shopping-cart i {
+    font-size: 25px;
+}
+
+ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    list-style: none;
+    gap: 10px;
+}
+
+ul li a{
+    text-decoration: none;
+    color: #000;
+    border: 1px solid rgb(85, 85, 85);
+    border-radius: 6px;
+    padding: 2px 7px;
+}
