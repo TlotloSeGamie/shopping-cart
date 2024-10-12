@@ -1,0 +1,23 @@
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #cfcfcf;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 390px;
+}
+ 
+.login-link {
+    color: rgb(255, 255, 255);
+    padding: 2px 8px;
+    border-radius: 15px;
+    background-color: rgb(41, 41,31);
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    text-decoration: none;
+}
