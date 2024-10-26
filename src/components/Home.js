@@ -1,8 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./Home.css";
 import NavBar from "./Navbar";
 
 function Home() {
+  const navigate = useNavigate(); // Initialize the useNavigate hook
+
+  const handleGetStartedClick = () => {
+    navigate('/login'); // Redirect to the login page
+  };
+
   return (
     <div>
       <NavBar />
@@ -13,7 +20,9 @@ function Home() {
             <p>
               Manage your shopping efficiently with <span>ShoppingList</span> – your ultimate tool for organizing and prioritizing your shopping items!
             </p>
-            <button className="get-started-btn">Get Started</button>
+            <button className="get-started-btn" onClick={handleGetStartedClick}>
+              Get Started
+            </button>
           </div>
           <div className="features">
             <h2>Why Choose Us?</h2>
