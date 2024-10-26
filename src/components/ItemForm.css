@@ -1,0 +1,137 @@
+/* src/ItemForm.css */
+
+/* Form styles */
+form {
+    max-width: 500px; /* Limit the form width */
+    margin: 20px auto; /* Center the form */
+    padding: 20px; /* Add padding around the form */
+    background-color: #ffffff; /* White background for the form */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    font-family: Arial, sans-serif; /* Set a professional font */
+}
+
+/* Heading styles */
+h2 {
+    font-size: 1.8em; /* Larger font for main headings */
+    color: #2c3e50; /* Dark blue color */
+    margin-bottom: 20px; /* Space below the heading */
+    text-align: center; /* Center align the heading */
+}
+
+h3 {
+    margin-top: 20px; /* Space above the items heading */
+    font-size: 1.5em; /* Medium font size for category items heading */
+    color: #34495e; /* Dark gray color */
+    text-align: center; /* Center align the heading */
+}
+
+/* Label styles */
+label {
+    font-size: 1.2em; /* Slightly larger font for labels */
+    color: #333; /* Dark gray color for labels */
+}
+
+/* Input and select styles */
+select,
+input {
+    width: 100%; /* Full width for inputs and selects */
+    padding: 12px; /* Padding for better touchability */
+    margin: 10px 0; /* Space above and below each element */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 1em; /* Standard font size */
+    box-sizing: border-box; /* Include padding and border in element's total width */
+}
+
+/* Focus styles */
+select:focus,
+input:focus {
+    border-color: #4CAF50; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5); /* Green glow on focus */
+}
+
+/* Button styles */
+button {
+    width: 100%; /* Full width for the button */
+    padding: 12px; /* Padding for the button */
+    background-color: #4CAF50; /* Green background */
+    color: white; /* White text */
+    border: none; /* Remove default border */
+    border-radius: 8px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 1.1em; /* Slightly larger font size */
+    transition: background-color 0.3s ease; /* Transition effect for hover */
+}
+
+button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Error message styles */
+.error {
+    color: red; /* Red color for error messages */
+    margin-top: 10px; /* Space above error messages */
+    text-align: center; /* Center align error messages */
+}
+
+/* Item list styles */
+.category-section {
+    margin: 15px 0; /* Space between each category */
+    padding: 10px; /* Padding inside category sections */
+    background-color: #f9f9f9; /* Light background color */
+    border-radius: 8px; /* Rounded corners for category sections */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+ul {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0; /* Remove default padding */
+    margin: 20px 0; /* Space around the list */
+}
+
+li {
+    padding: 10px; /* Padding for each item */
+    border-bottom: 1px solid #ddd; /* Light gray bottom border for items */
+    color: #333; /* Dark gray color for item text */
+    transition: background-color 0.2s; /* Transition for hover effect */
+}
+
+li:last-child {
+    border-bottom: none; /* Remove border for the last item */
+}
+
+li:hover {
+    background-color: #f1f1f1; /* Light gray background on hover */
+}
+
+/* Empty list message styles */
+li.no-items {
+    text-align: center; /* Center align when there are no items */
+    color: #999; /* Light gray for no items message */
+    padding: 20px; /* Padding for the message */
+}
+/* src/ItemForm.css */
+
+/* Existing styles... */
+
+/* Ensure category section has adequate spacing */
+.category-section {
+    margin: 15px 0; /* Space between each category */
+    padding: 10px; /* Padding inside category sections */
+    background-color: #f9f9f9; /* Light background color */
+    border-radius: 8px; /* Rounded corners for category sections */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Ensure no items message is styled properly */
+.no-items {
+    color: #999; /* Light gray for no items text */
+    font-style: italic; /* Italicize for emphasis */
+}
+
+/* Other styles remain unchanged */
+.categories {
+    display: flex;
+}

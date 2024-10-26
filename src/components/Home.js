@@ -1,12 +1,30 @@
+// src/Home.js
+
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import "./Home.css";
 
-const Home = () => {
-    return (
-        <div>
-
+function Home() {
+  return (
+    <div className="main">
+      <div className="home-container">
+        <div className="hero">
+          <h1>Welcome to <span>Shopping List</span></h1>
+          <p>
+            Manage your shopping efficiently with <span>ShoppingList</span> – your ultimate tool for organizing and prioritizing your shopping items!
+          </p>
+          <button className="get-started-btn">Get Started</button>
         </div>
-    )
-};
+        <div className="features">
+          <h2>Why Choose Us?</h2>
+          <ul>
+            <li>Add items to your shopping list easily</li>
+            <li>Remove items when they're no longer needed</li>
+            <li>Track what you need to buy seamlessly</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default Home;
