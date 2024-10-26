@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     categories: [
-        "All",
+        // "All",
         "Fruits",
         "Vegetables",
         "Meat & Fish",

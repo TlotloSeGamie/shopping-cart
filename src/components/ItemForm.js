@@ -2,79 +2,94 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCategory } from '../redux/categoriesSlice';
 import './ItemForm.css';
+import NavBar from './Navbar';
 
 const ItemForm = () => {
     const dispatch = useDispatch();
     const categories = useSelector((state) => state.categories.categories);
     const itemsByCategory = useSelector((state) => state.categories.items);
 
-    const [activeCategory, setActiveCategory] = useState(null); // State for active category
+    const [activeCategory, setActiveCategory] = useState(null); // State for active category display
+    const [selectedCategory, setSelectedCategory] = useState(''); // Separate state for item addition category
     const [item, setItem] = useState('');
+    const [showForm, setShowForm] = useState(false); // State to toggle form visibility
 
-    const handleSubmit = (e) => {
+    const handleAddItem = (e) => {
         e.preventDefault();
-        if (item && activeCategory) {
-            dispatch(addItemToCategory({ category: activeCategory, item }));
+        if (item && selectedCategory) {
+            dispatch(addItemToCategory({ category: selectedCategory, item }));
             setItem('');
+            setShowForm(false); 
         }
     };
 
     return (
         <div>
-            <h2>Add Item to Category</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="category">Select Category:</label>
-                    <select
-                        id="category"
-                        onChange={(e) => setActiveCategory(e.target.value)}
-                    >
-                        <option value="">-- Select a Category --</option>
-                        {categories.map((category) => (
-                            <option key={category} value={category}>
-                                {category}
-                            </option>
-                        ))}
-                    </select>
+            <NavBar />
+            <div className='category-container'>
+                <div className='item-btns'>
+                    <button onClick={() => setShowForm(!showForm)} className='item-btn'>
+                        {showForm ? 'Cancel' : 'Add Item'}
+                    </button>
                 </div>
-                {activeCategory && (
-                    <div>
-                        <label htmlFor="item">Item:</label>
-                        <input
-                            type="text"
-                            id="item"
-                            value={item}
-                            onChange={(e) => setItem(e.target.value)}
-                            placeholder="Enter item name"
-                        />
-                        <button type="submit">Add Item</button>
-                    </div>
+                {showForm && (
+                    <form onSubmit={handleAddItem}>
+                        <h2>Add Item to Category</h2>
+                        <div>
+                            <label htmlFor="category">Select Category to Add Item:</label>
+                            <select
+                                id="category"
+                                onChange={(e) => setSelectedCategory(e.target.value)}
+                                value={selectedCategory}
+                            >
+                                <option value="">-- Select a Category --</option>
+                                {categories.map((category) => (
+                                    <option key={category} value={category}>
+                                        {category}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div>
+                            <label htmlFor="item">Item:</label>
+                            <input
+                                type="text"
+                                id="item"
+                                value={item}
+                                onChange={(e) => setItem(e.target.value)}
+                                placeholder="Enter item name"
+                            />
+                            <button type="submit">Add Item</button>
+                        </div>
+                    </form>
                 )}
-            </form>
-
-            <h3>Categories:</h3>
-            <div className='categories'>
-                {categories.map((category) => (
-                    <div key={category} className="category-section">
+                <h2>Categories</h2>
+                <div className="categories">
+                    {categories.map((category) => (
                         <button
-                            className="category-button"
+                            key={category}
+                            className={`category-button ${activeCategory === category ? 'active' : ''}`}
                             onClick={() => setActiveCategory(activeCategory === category ? null : category)}
                         >
                             {category}
                         </button>
-                        {activeCategory === category && (
-                            <ul>
-                                {itemsByCategory[category]?.length > 0 ? (
-                                    itemsByCategory[category].map((item, index) => (
-                                        <li key={index}>{item}</li>
-                                    ))
-                                ) : (
-                                    <li className="no-items">No items in this category.</li>
-                                )}
-                            </ul>
-                        )}
+                    ))}
+                </div>
+                {/* Display items list below categories */}
+                {activeCategory && (
+                    <div className="item-list">
+                        <h4>Items in {activeCategory}</h4>
+                        <ul>
+                            {itemsByCategory[activeCategory]?.length > 0 ? (
+                                itemsByCategory[activeCategory].map((item, index) => (
+                                    <li key={index}>{item}</li>
+                                ))
+                            ) : (
+                                <li className="no-items">No items in this category.</li>
+                            )}
+                        </ul>
                     </div>
-                ))}
+                )}
             </div>
         </div>
     );

@@ -11,8 +11,8 @@ import ItemForm from './components/ItemForm';
 function App() {
   return (
     <div>
-      {/* <Home/> */}
-      <ItemForm />
+      <Home/>
+      {/* <ItemForm /> */}
     </div>
   );
 }
