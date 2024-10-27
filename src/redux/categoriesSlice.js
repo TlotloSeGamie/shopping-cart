@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     categories: [
-        // "All",
+        "All", 
         "Fruits",
         "Vegetables",
         "Meat & Fish",
@@ -17,7 +17,6 @@ const initialState = {
         "Household and Cleaning",
         "Personal Care",
         "Baby Products"
-        
     ],
     items: {}
 };
@@ -32,9 +31,12 @@ const categoriesSlice = createSlice({
                 state.items[category] = [];
             }
             state.items[category].push(item);
+        },
+        loadItems: (state, action) => {
+            state.items = action.payload; // Load items from localStorage into state
         }
     }
 });
 
-export const { addItemToCategory } = categoriesSlice.actions;
+export const { addItemToCategory, loadItems } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

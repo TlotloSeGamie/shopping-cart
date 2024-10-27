@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { FaUser, FaSignInAlt, FaUserPlus, FaSignOutAlt, FaUserCircle } from 'react-icons/fa'; // Importing icons from react-icons
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { FaUserCircle, FaSignInAlt, FaUserPlus, FaSignOutAlt } from 'react-icons/fa'; 
+import Profile from './Profile';
 import "./Navbar.css";
 
 const NavBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
+    const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+    const navigate = useNavigate(); // Initialize useNavigate for navigation
 
-    useEffect(() => {
+    useEffect(() => { 
         const userData = localStorage.getItem('user');
         if (userData) {
             const { username } = JSON.parse(userData);
@@ -19,6 +23,12 @@ const NavBar = () => {
         localStorage.removeItem('user');
         setIsLoggedIn(false);
         setUsername('');
+        setIsProfileModalOpen(false);
+        navigate('/'); // Redirect to the home page
+    };
+
+    const toggleProfileModal = () => {
+        setIsProfileModalOpen(!isProfileModalOpen);
     };
 
     return (
@@ -28,9 +38,10 @@ const NavBar = () => {
             </div>
             <div className="logins">
                 {isLoggedIn ? (
-                    <>  
-                        {/* <FaUser/> */}
-                        <span className="username"> <FaUserCircle  size={60}/>{username}</span>
+                    <>
+                        <span className="username" onClick={toggleProfileModal}> 
+                            <FaUserCircle size={60} /> {username} {/* Display the username */}
+                        </span>
                         <button onClick={handleLogout} className="logout-button">
                             <FaSignOutAlt /> Logout
                         </button>
@@ -46,6 +57,14 @@ const NavBar = () => {
                     </>
                 )}
             </div>
+
+            {isProfileModalOpen && (
+                <div className="profile-modal-overlay" onClick={toggleProfileModal}>
+                    <div className="profile-modal-content" onClick={(e) => e.stopPropagation()}>
+                        <Profile />
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

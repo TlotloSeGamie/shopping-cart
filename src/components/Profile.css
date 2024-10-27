@@ -15,7 +15,26 @@
     border-radius: 50%; 
     object-fit: cover; 
     margin-bottom: 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
+.clickable-icon {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.clickable-icon:hover, .profile-image:hover {
+    transform: scale(1.05);
+    /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
+}
+
+.clickable-icon:active, .profile-image:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+  
 
 h2 {
     color: #333;

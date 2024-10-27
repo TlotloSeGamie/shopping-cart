@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from "react-redux";
 import "./Login.css";
 
 function Login({ onLogin }) {
@@ -11,6 +12,18 @@ function Login({ onLogin }) {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    const currentUserEmail = localStorage.getItem('currentUser');
+    if (currentUserEmail) {
+        const savedItems = JSON.parse(localStorage.getItem(`items_${currentUserEmail}`));
+        if (savedItems) {
+            dispatch({ type: 'categories/loadItems', payload: savedItems });
+        }
+    }
+}, [dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,14 +54,17 @@ function Login({ onLogin }) {
     }
 
     // Fetch the user data from localStorage
-    const storedUser = JSON.parse(localStorage.getItem('user'));
-    if (storedUser && storedUser.email === formData.email && storedUser.password === formData.password) {
-      onLogin(storedUser);  // Call the passed onLogin function
-      navigate('/itemform'); // Redirect to the item form page after login
+    const existingUsers = JSON.parse(localStorage.getItem('users')) || {};
+    const storedUser = existingUsers[formData.email];
+
+    if (storedUser && storedUser.password === formData.password) {
+        localStorage.setItem('currentUser', formData.email); // Save the logged-in user’s email in `currentUser`
+        onLogin(storedUser);
+        navigate('/itemform');
     } else {
-      setErrors({ form: 'Invalid email or password' });
+        setErrors({ form: 'Invalid email or password' });
     }
-  };
+};
 
   const toggleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);

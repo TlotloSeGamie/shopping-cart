@@ -4,7 +4,7 @@ import "./Login.css";
 
 function Register() {
   const [formData, setFormData] = useState({
-    username: '',  // Added username field
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -12,7 +12,7 @@ function Register() {
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,7 +26,8 @@ function Register() {
     e.preventDefault();
     const validationErrors = {};
 
-    if (!formData.username.trim()) { // Validate username
+    // Username validation
+    if (!formData.username.trim()) {
       validationErrors.username = "Username is required";
     }
 
@@ -50,27 +51,29 @@ function Register() {
       return;
     }
 
-    try {
-      // Save registration data to localStorage
-      localStorage.setItem('user', JSON.stringify({
-        username: formData.username,  // Save username to localStorage
-        email: formData.email,
-        password: formData.password,
-      }));
-      alert("Registration successful! Please log in.");
-      navigate('/login'); // Navigate to login page after registration
-    } catch (error) {
-      setErrors({ form: 'Registration error' });
+    const existingUser = JSON.parse(localStorage.getItem('users')) || {};
+
+    if (!existingUser[formData.email]) { // Only register if the email is not already used
+        try {
+            existingUser[formData.email] = {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password,
+            };
+            localStorage.setItem('users', JSON.stringify(existingUser));
+            alert("Registration successful! Please log in.");
+            navigate('/login');
+        } catch (error) {
+            setErrors({ form: 'Registration error' });
+        }
+    } else {
+        alert("A user is already registered. Please log in.");
+        navigate('/login');
     }
-  };
+};
 
-  const toggleShowPassword = () => {
-    setShowPassword((prev) => !prev);
-  };
-
-  const toggleShowConfirmPassword = () => {
-    setShowConfirmPassword((prev) => !prev);
-  };
+  const toggleShowPassword = () => setShowPassword(prev => !prev);
+  const toggleShowConfirmPassword = () => setShowConfirmPassword(prev => !prev);
 
   return (
     <div className="main-form-container">

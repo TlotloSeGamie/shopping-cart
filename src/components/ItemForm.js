@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCategory } from '../redux/categoriesSlice';
 import './ItemForm.css';
@@ -6,29 +6,50 @@ import NavBar from './Navbar';
 
 const ItemForm = () => {
     const dispatch = useDispatch();
-    const categories = useSelector((state) => state.categories.categories);
-    const itemsByCategory = useSelector((state) => state.categories.items);
+    const categories = useSelector((state) => state.categories.categories) || []; // Default to empty array
+    const itemsByCategory = useSelector((state) => state.categories.items) || {};
 
-    const [activeCategory, setActiveCategory] = useState(null); // State for active category display
-    const [selectedCategory, setSelectedCategory] = useState(''); // Separate state for item addition category
+    const [activeCategory, setActiveCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState('');
     const [item, setItem] = useState('');
-    const [showForm, setShowForm] = useState(false); // State to toggle form visibility
+    const [showForm, setShowForm] = useState(false);
+
+    // Retrieve the logged-in user from localStorage
+    const user = JSON.parse(localStorage.getItem('user'));
+    const userId = user?.email; // Unique key for the user, assuming email is unique
+
+    useEffect(() => {
+        if (userId) {
+            const savedItems = JSON.parse(localStorage.getItem(`items_${userId}`));
+            if (savedItems) {
+                dispatch({ type: 'categories/loadItems', payload: savedItems });
+            }
+        }
+    }, [dispatch, userId]);
 
     const handleAddItem = (e) => {
         e.preventDefault();
         if (item && selectedCategory) {
             dispatch(addItemToCategory({ category: selectedCategory, item }));
+            
+            const currentUserEmail = localStorage.getItem('currentUser');
+            const updatedItems = {
+                ...itemsByCategory,
+                [selectedCategory]: [...(itemsByCategory[selectedCategory] || []), item],
+            };
+            localStorage.setItem(`items_${currentUserEmail}`, JSON.stringify(updatedItems));
+            
             setItem('');
-            setShowForm(false); 
+            setShowForm(false);
         }
     };
 
     return (
         <div>
             <NavBar />
-            <div className='category-container'>
-                <div className='item-btns'>
-                    <button onClick={() => setShowForm(!showForm)} className='item-btn'>
+            <div className="category-container">
+                <div className="item-btns">
+                    <button onClick={() => setShowForm(!showForm)} className="item-btn">
                         {showForm ? 'Cancel' : 'Add Item'}
                     </button>
                 </div>
@@ -43,7 +64,7 @@ const ItemForm = () => {
                                 value={selectedCategory}
                             >
                                 <option value="">-- Select a Category --</option>
-                                {categories.map((category) => (
+                                {Array.isArray(categories) && categories.map((category) => (
                                     <option key={category} value={category}>
                                         {category}
                                     </option>
@@ -65,7 +86,7 @@ const ItemForm = () => {
                 )}
                 <h2>Categories</h2>
                 <div className="categories">
-                    {categories.map((category) => (
+                    {Array.isArray(categories) && categories.map((category) => (
                         <button
                             key={category}
                             className={`category-button ${activeCategory === category ? 'active' : ''}`}
@@ -75,7 +96,6 @@ const ItemForm = () => {
                         </button>
                     ))}
                 </div>
-                {/* Display items list below categories */}
                 {activeCategory && (
                     <div className="item-list">
                         <h4>Items in {activeCategory}</h4>
