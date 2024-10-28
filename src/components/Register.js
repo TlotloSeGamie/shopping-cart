@@ -3,77 +3,50 @@ import { useNavigate } from 'react-router-dom';
 import "./Login.css";
 
 function Register() {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = {};
-
-    // Username validation
-    if (!formData.username.trim()) {
-      validationErrors.username = "Username is required";
-    }
-
-    if (!formData.email.trim()) {
-      validationErrors.email = "Email is required";
-    }
-
-    if (!formData.password.trim()) {
-      validationErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      validationErrors.password = "Password should be at least 8 characters";
-    }
-
-    if (formData.confirmPassword !== formData.password) {
-      validationErrors.confirmPassword = "Passwords do not match";
-    }
-
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length > 0) {
-      return;
-    }
-
-    const existingUser = JSON.parse(localStorage.getItem('users')) || {};
-
-    if (!existingUser[formData.email]) { // Only register if the email is not already used
-        try {
-            existingUser[formData.email] = {
-                username: formData.username,
-                email: formData.email,
-                password: formData.password,
-            };
-            localStorage.setItem('users', JSON.stringify(existingUser));
-            alert("Registration successful! Please log in.");
-            navigate('/login');
-        } catch (error) {
-            setErrors({ form: 'Registration error' });
-        }
-    } else {
-        alert("A user is already registered. Please log in.");
-        navigate('/login');
-    }
-};
-
   const toggleShowPassword = () => setShowPassword(prev => !prev);
   const toggleShowConfirmPassword = () => setShowConfirmPassword(prev => !prev);
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!username) newErrors.username = "Username is required.";
+    if (!email) newErrors.email = "Email is required.";
+    else if (!validateEmail(email)) newErrors.email = "Please enter a valid email address.";
+    
+    if (!password) newErrors.password = "Password is required.";
+    if (password !== confirmPassword) newErrors.confirmPassword = "Passwords must match.";
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return false;
+    }
+    
+    setErrors({});
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      // Save the user in localStorage
+      const user = { username, email, password };
+      localStorage.setItem('user', JSON.stringify(user));
+      navigate('/login'); // Redirect to login page after successful registration
+    }
+  };
 
   return (
     <div className="main-form-container">
@@ -86,57 +59,47 @@ function Register() {
         <h4>Register</h4>
         {errors.form && <span>{errors.form}</span>}
 
-        <label htmlFor="username"><b>Username</b></label> {/* New Username Label */}
         <input
           type="text"
-          placeholder="Username"  // Placeholder for Username
-          name="username"  // Name for Username input
-          value={formData.username}  // State for Username
-          onChange={handleChange}
+          placeholder="Username"
+          name="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
-        {errors.username && <span>{errors.username}</span>} {/* Error message for Username */}
+        {errors.username && <span>{errors.username}</span>}
 
-        <label htmlFor="email"><b>Email</b></label>
         <input
           type="text"
           placeholder="Email"
           name="email"
-          value={formData.email}
-          onChange={handleChange}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         {errors.email && <span>{errors.email}</span>}
 
-        <label htmlFor="password"><b>Password</b></label>
         <div className="password-field">
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             name="password"
-            value={formData.password}
-            onChange={handleChange}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <span
-            onClick={toggleShowPassword}
-            className="show-hide-btn"
-          >
+          <span onClick={toggleShowPassword} className="show-hide-btn">
             {showPassword ? "Hide" : "Show"}
           </span>
         </div>
         {errors.password && <span>{errors.password}</span>}
 
-        <label htmlFor="confirmPassword"><b>Confirm Password</b></label>
         <div className="password-field">
           <input
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirm Password"
             name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <span
-            onClick={toggleShowConfirmPassword}
-            className="show-hide-btn"
-          >
+          <span onClick={toggleShowConfirmPassword} className="show-hide-btn">
             {showConfirmPassword ? "Hide" : "Show"}
           </span>
         </div>

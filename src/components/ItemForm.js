@@ -16,7 +16,7 @@ const ItemForm = () => {
 
     // Retrieve the logged-in user from localStorage
     const user = JSON.parse(localStorage.getItem('user'));
-    const userId = user?.email; // Unique key for the user, assuming email is unique
+    const userId = user?.email; 
 
     useEffect(() => {
         if (userId) {
@@ -57,6 +57,17 @@ const ItemForm = () => {
                     <form onSubmit={handleAddItem}>
                         <h2>Add Item to Category</h2>
                         <div>
+                        </div>
+                        <div>
+                            <label htmlFor="item">Item:</label>
+                            <input
+                                type="text"
+                                id="item"
+                                value={item}
+                                onChange={(e) => setItem(e.target.value)}
+                                placeholder="Enter item name"
+                            />
+                        </div>
                             <label htmlFor="category">Select Category to Add Item:</label>
                             <select
                                 id="category"
@@ -70,18 +81,14 @@ const ItemForm = () => {
                                     </option>
                                 ))}
                             </select>
-                        </div>
-                        <div>
-                            <label htmlFor="item">Item:</label>
+                            <label htmlFor='notes'>Notes</label>
                             <input
-                                type="text"
-                                id="item"
-                                value={item}
-                                onChange={(e) => setItem(e.target.value)}
-                                placeholder="Enter item name"
+                                type='text'
+                                id='note'
+                                // value={notes}
+                                placeholder='Enter your notes/ description'
                             />
                             <button type="submit">Add Item</button>
-                        </div>
                     </form>
                 )}
                 <h2>Categories</h2>

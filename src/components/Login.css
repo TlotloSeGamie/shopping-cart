@@ -44,6 +44,7 @@
 }
   
 .form-container .btn {
+    width: 25%;
     background-color: #4CAF50;
     color: white;
     padding: 0.75rem 1.5rem;
@@ -89,23 +90,31 @@
 }
 
 .password-field {
+    width: 70%;
     position: relative;
 }
 
 .password-field input {
-    padding-right: 50px; 
+    padding-right: 40px; /* Adjust padding to make space for the button */
+    width: 100%; /* Ensure full width */
 }
 
 .show-hide-btn {
     position: absolute;
-    right: 10px;
+    right: 10px; /* Positioning within the input */
     top: 50%;
     transform: translateY(-50%);
     cursor: pointer;
     color: #007bff;
     font-size: 0.9em;
     user-select: none;
+    background: transparent; /* Make background transparent */
+    border: none; /* Remove border */
+    outline: none; /* Remove outline */
+    padding: 0; /* Remove padding */
 }
+
+
 
 .navigation-buttons {
     display: flex;

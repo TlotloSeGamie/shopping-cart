@@ -33,7 +33,7 @@ const categoriesSlice = createSlice({
             state.items[category].push(item);
         },
         loadItems: (state, action) => {
-            state.items = action.payload; // Load items from localStorage into state
+            state.items = action.payload; 
         }
     }
 });

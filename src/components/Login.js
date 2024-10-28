@@ -1,73 +1,50 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from "react-redux";
 import "./Login.css";
 
-function Login({ onLogin }) {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-
+function Login() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-
-  useEffect(() => {
-    const currentUserEmail = localStorage.getItem('currentUser');
-    if (currentUserEmail) {
-        const savedItems = JSON.parse(localStorage.getItem(`items_${currentUserEmail}`));
-        if (savedItems) {
-            dispatch({ type: 'categories/loadItems', payload: savedItems });
-        }
-    }
-}, [dispatch]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const validationErrors = {};
-
-    if (!formData.email.trim()) {
-      validationErrors.email = "Email is required";
-    }
-
-    if (!formData.password.trim()) {
-      validationErrors.password = "Password is required";
-    } else if (formData.password.length < 8) {
-      validationErrors.password = "Password should be at least 8 characters";
-    }
-
-    setErrors(validationErrors);
-
-    if (Object.keys(validationErrors).length > 0) {
-      return;
-    }
-
-    // Fetch the user data from localStorage
-    const existingUsers = JSON.parse(localStorage.getItem('users')) || {};
-    const storedUser = existingUsers[formData.email];
-
-    if (storedUser && storedUser.password === formData.password) {
-        localStorage.setItem('currentUser', formData.email); // Save the logged-in user’s email in `currentUser`
-        onLogin(storedUser);
-        navigate('/itemform');
-    } else {
-        setErrors({ form: 'Invalid email or password' });
-    }
-};
 
   const toggleShowPassword = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!email) newErrors.email = "Email is required.";
+    else if (!validateEmail(email)) newErrors.email = "Please enter a valid email address.";
+    
+    if (!password) newErrors.password = "Password is required.";
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return false;
+    }
+    
+    setErrors({});
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      // Check if user is registered in localStorage
+      const storedUser = JSON.parse(localStorage.getItem('user'));
+      if (storedUser && storedUser.email === email && storedUser.password === password) {
+        navigate('/itemform'); // Redirect if credentials match
+      } else {
+        setErrors({ form: "Invalid email or password, or user is not registered." });
+      }
+    }
   };
 
   return (
@@ -81,29 +58,24 @@ function Login({ onLogin }) {
         <h4>Sign In</h4>
         {errors.form && <span>{errors.form}</span>}
 
-        <label htmlFor="email"><b>Email</b></label>
         <input
           type="text"
           placeholder="Email"
           name="email"
-          value={formData.email}
-          onChange={handleChange}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         {errors.email && <span>{errors.email}</span>}
 
-        <label htmlFor="password"><b>Password</b></label>
         <div className="password-field">
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             name="password"
-            value={formData.password}
-            onChange={handleChange}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          <span
-            onClick={toggleShowPassword}
-            className="show-hide-btn"
-          >
+          <span onClick={toggleShowPassword} className="show-hide-btn">
             {showPassword ? "Hide" : "Show"}
           </span>
         </div>
