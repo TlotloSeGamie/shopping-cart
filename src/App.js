@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import ItemForm from './components/ItemForm';
 import Profile from './components/Profile';
+import PrivacyPolicy from './components/PrivacyPolicy';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -21,6 +22,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/itemform" element={<ItemForm />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       </Routes>
     </Router>
   );

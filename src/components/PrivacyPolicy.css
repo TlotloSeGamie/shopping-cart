@@ -1,0 +1,112 @@
+.privacy-policy-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    background-color: #f9f9f9;
+    background: linear-gradient(135deg, #f0f8ff, #d0e8f2);
+    min-height: 80vh;
+}
+
+.privacy-policy {
+    max-width: 800px;
+    width: 100%;
+    background-color: #fff;
+    padding: 40px 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    font-family: 'Verdana', sans-serif;
+    color: #2c3e50;
+}
+
+.privacy-policy h2 {
+    font-size: 2.2em;
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.privacy-policy h3 {
+    font-size: 1.8em;
+    color: #2c3e50;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.privacy-policy p,
+.privacy-policy ul {
+    font-size: 1.1em;
+    color: #555;
+    line-height: 1.6;
+    margin: 10px 0;
+}
+
+.privacy-policy ul {
+    list-style-type: none;
+    padding: 0;
+    margin-left: 20px;
+}
+
+.privacy-policy ul li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 10px;
+}
+
+.privacy-policy ul li:before {
+    content: "🔒";
+    color: #ff6347;
+    font-size: 1.3em;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.privacy-policy a {
+    color: #ff6347;
+    text-decoration: none;
+}
+
+.privacy-policy a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .privacy-policy {
+        padding: 30px 20px;
+    }
+
+    .privacy-policy h2 {
+        font-size: 2em;
+    }
+
+    .privacy-policy h3 {
+        font-size: 1.6em;
+    }
+    
+    .privacy-policy p,
+    .privacy-policy ul {
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 480px) {
+    .privacy-policy {
+        padding: 20px 15px;
+    }
+
+    .privacy-policy h2 {
+        font-size: 1.8em;
+    }
+
+    .privacy-policy h3 {
+        font-size: 1.5em;
+    }
+
+    .privacy-policy p,
+    .privacy-policy ul {
+        font-size: 0.95em;
+    }
+}

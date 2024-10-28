@@ -81,6 +81,8 @@ const ItemForm = () => {
                                     </option>
                                 ))}
                             </select>
+                                
+
                             <label htmlFor='notes'>Notes</label>
                             <input
                                 type='text'

@@ -62,7 +62,7 @@ function Login() {
           type="text"
           placeholder="Email"
           name="email"
-          value={email}
+          // value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         {errors.email && <span>{errors.email}</span>}
@@ -72,7 +72,7 @@ function Login() {
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             name="password"
-            value={password}
+            // value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <span onClick={toggleShowPassword} className="show-hide-btn">
