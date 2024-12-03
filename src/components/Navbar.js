@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom"; 
 import { FaUserCircle, FaSignInAlt, FaUserPlus, FaSignOutAlt } from 'react-icons/fa'; 
 import Profile from './Profile';
 import "./Navbar.css";
+import PrivacyPolicy from "./PrivacyPolicy";
 
 const NavBar = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [username, setUsername] = useState('');
     const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-    const navigate = useNavigate(); // Initialize useNavigate for navigation
+    const navigate = useNavigate(); 
 
     useEffect(() => { 
         const userData = localStorage.getItem('user');
@@ -24,7 +25,7 @@ const NavBar = () => {
         setIsLoggedIn(false);
         setUsername('');
         setIsProfileModalOpen(false);
-        navigate('/'); // Redirect to the home page
+        navigate('/'); 
     };
 
     const toggleProfileModal = () => {
@@ -40,7 +41,7 @@ const NavBar = () => {
                 {isLoggedIn ? (
                     <>
                         <span className="username" onClick={toggleProfileModal}> 
-                            <FaUserCircle size={60} /> {username} {/* Display the username */}
+                            <FaUserCircle size={60} /> {username} 
                         </span>
                         <button onClick={handleLogout} className="logout-button">
                             <FaSignOutAlt /> Logout
@@ -56,6 +57,7 @@ const NavBar = () => {
                         </a>
                     </>
                 )}
+            {/* <PrivacyPolicy />  */}
             </div>
 
             {isProfileModalOpen && (

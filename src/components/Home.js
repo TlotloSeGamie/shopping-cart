@@ -1,13 +1,13 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";  
 import "./Home.css";
 import NavBar from "./Navbar";
 
 function Home() {
-  const navigate = useNavigate(); // Initialize the useNavigate hook
+  const navigate = useNavigate(); 
 
   const handleGetStartedClick = () => {
-    navigate('/login'); // Redirect to the login page
+    navigate('/login'); 
   };
 
   return (

@@ -37,10 +37,9 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Check if user is registered in localStorage
       const storedUser = JSON.parse(localStorage.getItem('user'));
       if (storedUser && storedUser.email === email && storedUser.password === password) {
-        navigate('/itemform'); // Redirect if credentials match
+        navigate('/itemform'); 
       } else {
         setErrors({ form: "Invalid email or password, or user is not registered." });
       }
@@ -50,7 +49,6 @@ function Login() {
   return (
     <div className="main-form-container">
       <div className="navigation-buttons">
-        <button onClick={() => navigate('/')} className="nav-btn">Home</button>
         <button onClick={() => navigate(-1)} className="nav-btn">Back</button>
       </div>
 
@@ -62,7 +60,6 @@ function Login() {
           type="text"
           placeholder="Email"
           name="email"
-          // value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         {errors.email && <span>{errors.email}</span>}
@@ -72,7 +69,6 @@ function Login() {
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             name="password"
-            // value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <span onClick={toggleShowPassword} className="show-hide-btn">

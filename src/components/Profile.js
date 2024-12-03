@@ -4,20 +4,20 @@ import { FaUserCircle } from "react-icons/fa";
 
 const Profile = () => {
   const [userData, setUserData] = useState({
-    username: "",
+    username: "", // Corrected property name
     email: "",
-    profileImage: null, // To store the uploaded profile image
+    profileImage: null,
   });
 
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState(userData);
-  const fileInputRef = useRef(null); // Reference to hidden file input
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
-    // Fetch the logged-in user's data from localStorage
-    const currentUserEmail = localStorage.getItem('currentUser');
+    const currentUserEmail = localStorage.getItem("currentUser");
     if (currentUserEmail) {
-      const storedUser = JSON.parse(localStorage.getItem('users'))[currentUserEmail];
+      const storedUsers = JSON.parse(localStorage.getItem("users")) || {};
+      const storedUser = storedUsers[currentUserEmail];
       if (storedUser) {
         setUserData(storedUser);
         setFormData(storedUser);
@@ -43,15 +43,16 @@ const Profile = () => {
   };
 
   const handleIconClick = () => {
-    fileInputRef.current.click(); // Trigger the file input on icon click
+    fileInputRef.current.click();
   };
 
   const handleSave = () => {
-    setUserData(formData);
-    // Update the user data in localStorage
-    const existingUsers = JSON.parse(localStorage.getItem('users')) || {};
-    existingUsers[formData.email] = { ...formData, profileImage: userData.profileImage };
-    localStorage.setItem('users', JSON.stringify(existingUsers));
+    const updatedData = { ...formData };
+    setUserData(updatedData);
+
+    const existingUsers = JSON.parse(localStorage.getItem("users")) || {};
+    existingUsers[updatedData.email] = updatedData;
+    localStorage.setItem("users", JSON.stringify(existingUsers));
     setIsEditing(false);
   };
 
@@ -63,13 +64,16 @@ const Profile = () => {
           src={userData.profileImage}
           alt="Profile"
           className="profile-image"
-          onClick={handleIconClick} // Trigger file upload on image click
+          onClick={handleIconClick}
         />
       ) : (
-        <FaUserCircle size={90} onClick={handleIconClick} className="clickable-icon" />
+        <FaUserCircle
+          size={90}
+          onClick={handleIconClick}
+          className="clickable-icon"
+        />
       )}
 
-      {/* Hidden file input */}
       <input
         type="file"
         ref={fileInputRef}
@@ -84,7 +88,7 @@ const Profile = () => {
             <input
               type="text"
               name="username"
-              value={formData.username}
+              value={formData.username} 
               onChange={handleChange}
             />
           </label>
@@ -93,26 +97,29 @@ const Profile = () => {
             <input
               type="email"
               name="email"
-              value={formData.email}
+              value={formData.email} 
               onChange={handleChange}
-              disabled // Disable editing email to avoid accidental changes
+              disabled 
             />
           </label>
-          <label>
-            Profile Image:
-            <input
-              type="file"
-              onChange={handleFileChange}
-            />
-          </label>
-          <button onClick={handleSave} className="btn">Save</button>
-          <button onClick={() => setIsEditing(false)} className="btn cancel">Cancel</button>
+          <button onClick={handleSave} className="btn">
+            Save
+          </button>
+          <button onClick={() => setIsEditing(false)} className="btn cancel">
+            Cancel
+          </button>
         </div>
       ) : (
         <div className="profile-details">
-          <p><strong>Username:</strong> {userData.username}</p>
-          <p><strong>Email:</strong> {userData.email}</p>
-          <button onClick={() => setIsEditing(true)} className="btn">Edit Profile</button>
+          <p>
+            <strong>Username:</strong> {userData.username}
+          </p>
+          <p>
+            <strong>Email:</strong> {userData.email}
+          </p>
+          <button onClick={() => setIsEditing(true)} className="btn">
+            Edit Profile
+          </button>
         </div>
       )}
     </div>

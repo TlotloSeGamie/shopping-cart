@@ -41,17 +41,15 @@ function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      // Save the user in localStorage
       const user = { username, email, password };
       localStorage.setItem('user', JSON.stringify(user));
-      navigate('/login'); // Redirect to login page after successful registration
+      navigate('/login'); 
     }
   };
 
   return (
     <div className="main-form-container">
       <div className="navigation-buttons">
-        <button onClick={() => navigate('/')} className="nav-btn">Home</button>
         <button onClick={() => navigate(-1)} className="nav-btn">Back</button>
       </div>
 
@@ -63,7 +61,6 @@ function Register() {
           type="text"
           placeholder="Username"
           name="username"
-          // value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
         {errors.username && <span>{errors.username}</span>}
@@ -72,7 +69,6 @@ function Register() {
           type="text"
           placeholder="Email"
           name="email"
-          // value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         {errors.email && <span>{errors.email}</span>}
@@ -82,7 +78,6 @@ function Register() {
             type={showPassword ? "text" : "password"}
             placeholder="Password"
             name="password"
-            // value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <span onClick={toggleShowPassword} className="show-hide-btn">
@@ -96,7 +91,6 @@ function Register() {
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirm Password"
             name="confirmPassword"
-            // value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <span onClick={toggleShowConfirmPassword} className="show-hide-btn">
