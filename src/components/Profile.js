@@ -4,7 +4,7 @@ import { FaUserCircle } from "react-icons/fa";
 
 const Profile = () => {
   const [userData, setUserData] = useState({
-    username: "", // Corrected property name
+    username: "",  
     email: "",
     profileImage: null,
   });

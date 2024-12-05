@@ -1,4 +1,3 @@
-// config-overrides.js
 module.exports = {
     webpack: (config) => {
         config.resolve.fallback = {

@@ -69,6 +69,14 @@
     max-width: 600px;
     width: 100%;
 }
+ul {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+    padding: 0;
+    margin: 20px 0;
+}
 
 .features h2 {
     font-size: 1.8em;
@@ -77,6 +85,8 @@
 }
 
 .features ul {
+    display: flex;
+    flex-direction: column;
     list-style-type: none; 
     padding: 0;
 }

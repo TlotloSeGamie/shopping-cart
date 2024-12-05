@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import Swal from 'sweetalert2'; 
 import "./Login.css";
 
 function Register() {
@@ -43,7 +44,20 @@ function Register() {
     if (validateForm()) {
       const user = { username, email, password };
       localStorage.setItem('user', JSON.stringify(user));
-      navigate('/login'); 
+      
+      Swal.fire({
+        icon: 'success',
+        title: 'Registration Successful',
+        text: 'You have been registered successfully!',
+      }).then(() => {
+        navigate('/login');
+      });
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Registration Failed',
+        text: 'Please correct the errors and try again.',
+      });
     }
   };
 

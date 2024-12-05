@@ -56,8 +56,7 @@ const NavBar = () => {
                             <FaUserPlus /> Register
                         </a>
                     </>
-                )}
-            {/* <PrivacyPolicy />  */}
+                )} 
             </div>
 
             {isProfileModalOpen && (

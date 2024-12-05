@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addItemToCategory } from '../redux/categoriesSlice';
+import { v4 as uuidv4 } from 'uuid'; 
+import { loadItems } from '../redux/categoriesSlice';
 import './ItemForm.css';
 import NavBar from './Navbar';
 import { RiShareLine, RiDeleteBin6Line, RiEditLine } from 'react-icons/ri';
@@ -23,37 +24,70 @@ const ItemForm = () => {
 
     useEffect(() => {
         if (userId) {
-            const savedItems = JSON.parse(localStorage.getItem(`items_${userId}`));
-            if (savedItems) {
-                dispatch({ type: 'categories/loadItems', payload: savedItems });
-            }
+            const savedItems = JSON.parse(localStorage.getItem(`items_${userId}`)) || {};
+            dispatch(loadItems(savedItems));
         }
     }, [dispatch, userId]);
 
     const handleAddItem = (e) => {
         e.preventDefault();
         if (item && selectedCategory && quantity) {
-            if (isEditing) {
-                handleUpdateItem(item, quantity);
-            } else {
-                dispatch(addItemToCategory({ category: selectedCategory, item }));
+            const newItem = {
+                id: isEditing && selectedItem ? selectedItem.id : uuidv4(),  
+                item,
+                quantity,
+                notes: selectedItem?.notes || null,
+            };
 
-                const updatedItems = {
-                    ...itemsByCategory,
-                    [selectedCategory]: [
-                        ...(itemsByCategory[selectedCategory] || []),
-                        { item, quantity, notes: '' },
-                    ],
-                };
+            const updatedItems = {
+                ...itemsByCategory,
+                [selectedCategory]: isEditing && selectedItem
+                    ? itemsByCategory[selectedCategory].map((i) =>
+                          i.id === selectedItem.id ? newItem : i 
+                      )
+                    : [...(itemsByCategory[selectedCategory] || []), newItem], 
+            };
 
-                localStorage.setItem(`items_${userId}`, JSON.stringify(updatedItems));
-            }
+            localStorage.setItem(`items_${userId}`, JSON.stringify(updatedItems));
+            dispatch(loadItems(updatedItems));
 
-            setItem('');
-            setQuantity('');
-            setShowForm(false);
-            setIsEditing(false);
+            resetForm();
         }
+    };
+
+    const handleDeleteItem = (category, itemToDelete) => {
+        const updatedItems = {
+            ...itemsByCategory,
+            [category]: itemsByCategory[category].filter((i) => i.id !== itemToDelete.id),
+        };
+        localStorage.setItem(`items_${userId}`, JSON.stringify(updatedItems));
+        dispatch(loadItems(updatedItems));
+    };
+
+    const handleEditItem = (category, item) => {
+        setItem(item.item);
+        setQuantity(item.quantity);
+        setSelectedCategory(category);
+        setShowForm(true);
+        setIsEditing(true);
+        setSelectedItem(item);  
+    };
+
+    const resetForm = () => {
+        setItem('');
+        setQuantity('');
+        setSelectedCategory('');
+        setShowForm(false);
+        setIsEditing(false);
+        setSelectedItem(null);
+    };
+
+    const openDetailsModal = (item) => {
+        setSelectedItem(item);
+    };
+
+    const closeDetailsModal = () => {
+        setSelectedItem(null);
     };
 
     const handleShare = async (content) => {
@@ -71,55 +105,15 @@ const ItemForm = () => {
         }
     };
 
-    const openDetailsModal = (item) => {
-        setSelectedItem(item);
-    };
-
-    const closeDetailsModal = () => {
-        setSelectedItem(null);
-    };
-
-    const handleEditItem = (category, item) => {
-        setItem(item.item);
-        setQuantity(item.quantity);
-        setSelectedCategory(category);
-        setShowForm(true);
-        setIsEditing(true);
-    };
-
-    const handleUpdateItem = (updatedItem, updatedQuantity) => {
-        const updatedItems = {
-            ...itemsByCategory,
-            [selectedCategory]: itemsByCategory[selectedCategory].map((i) =>
-                i.item === updatedItem ? { ...i, item: updatedItem, quantity: updatedQuantity } : i
-            ),
-        };
-
-        localStorage.setItem(`items_${userId}`, JSON.stringify(updatedItems));
-        dispatch({ type: 'categories/loadItems', payload: updatedItems });
-    };
-
-    const handleDeleteItem = (category, itemToDelete) => {
-        const updatedItems = {
-            ...itemsByCategory,
-            [category]: itemsByCategory[category].filter((i) => i.item !== itemToDelete.item),
-        };
-
-        localStorage.setItem(`items_${userId}`, JSON.stringify(updatedItems));
-        dispatch({ type: 'categories/loadItems', payload: updatedItems });
-    };
-
     return (
         <div>
             <NavBar />
             <div className="category-container">
-                <div className="item-btns">
-                    <button onClick={() => setShowForm(!showForm)} className="item-btn">
-                        {showForm ? 'Cancel' : 'Add Item'}
-                    </button>
-                </div>
+                <button onClick={() => setShowForm(!showForm)} className="item-btn">
+                    {showForm ? 'Cancel' : 'Add Item'}
+                </button>
                 {showForm && (
-                    <form onSubmit={handleAddItem}>
+                    <form onSubmit={handleAddItem} className="item-form">
                         <h2>{isEditing ? 'Update Item' : 'Add Item to Category'}</h2>
                         <div>
                             <label htmlFor="item">Item:</label>
@@ -129,6 +123,7 @@ const ItemForm = () => {
                                 value={item}
                                 onChange={(e) => setItem(e.target.value)}
                                 placeholder="Enter item name"
+                                required
                             />
                         </div>
                         <div>
@@ -139,6 +134,7 @@ const ItemForm = () => {
                                 value={quantity}
                                 onChange={(e) => setQuantity(e.target.value)}
                                 placeholder="Enter quantity"
+                                required
                             />
                         </div>
                         <div>
@@ -147,6 +143,7 @@ const ItemForm = () => {
                                 id="category"
                                 onChange={(e) => setSelectedCategory(e.target.value)}
                                 value={selectedCategory}
+                                required
                             >
                                 <option value="">-- Select a Category --</option>
                                 {categories.map((category) => (
@@ -165,7 +162,9 @@ const ItemForm = () => {
                         <button
                             key={category}
                             className={`category-button ${activeCategory === category ? 'active' : ''}`}
-                            onClick={() => setActiveCategory(activeCategory === category ? null : category)}
+                            onClick={() =>
+                                setActiveCategory(activeCategory === category ? null : category)
+                            }
                         >
                             {category}
                         </button>
@@ -179,33 +178,35 @@ const ItemForm = () => {
                                 <li key={index} className="item-list-entry">
                                     <strong>{item.item}</strong> (Qty: {item.quantity})<br />
                                     {item.notes && <em>Notes: {item.notes}</em>}<br />
-                                    <button
-                                        onClick={() => openDetailsModal(item)}
-                                        className="view-details-button"
-                                    >
-                                        View Details
-                                    </button>
-                                    <button
-                                        onClick={() => handleShare(item.item)}
-                                        className="share-button"
-                                        title="Share Item"
-                                    >
-                                        <RiShareLine size={20} />
-                                    </button>
-                                    <button
-                                        onClick={() => handleEditItem(activeCategory, item)}
-                                        className="edit-button"
-                                        title="Edit Item"
-                                    >
-                                        <RiEditLine size={20} />
-                                    </button>
-                                    <button
-                                        onClick={() => handleDeleteItem(activeCategory, item)}
-                                        className="delete-button"
-                                        title="Delete Item"
-                                    >
-                                        <RiDeleteBin6Line size={20} />
-                                    </button>
+                                    <div className='buttons'>
+                                        <button
+                                            onClick={() => openDetailsModal(item)}
+                                            className="view-details-button"
+                                        >
+                                            View Details
+                                        </button>
+                                        <button
+                                            onClick={() => handleShare(item.item)}
+                                            className="share-button"
+                                            title="Share Item"
+                                        >
+                                            <RiShareLine size={20} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleEditItem(activeCategory, item)}
+                                            className="edit-button"
+                                            title="Edit Item"
+                                        >
+                                            <RiEditLine size={20} />
+                                        </button>
+                                        <button
+                                            onClick={() => handleDeleteItem(activeCategory, item)}
+                                            className="delete-button"
+                                            title="Delete Item"
+                                        >
+                                            <RiDeleteBin6Line size={20} />
+                                        </button>
+                                    </div>
                                 </li>
                             ))}
                         </ul>
